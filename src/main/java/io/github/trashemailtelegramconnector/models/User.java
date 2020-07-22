@@ -43,6 +43,12 @@ public class User {
         this(chatId, emailId, forwardsTo, Boolean.TRUE);
     }
 
+    public User(long chatId, String emailId) {
+        this.chatId = chatId;
+        this.emailId = emailId;
+        this.isActive = true;
+    }
+
     @Override
     public java.lang.String toString() {
         return this.emailId;
