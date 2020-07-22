@@ -1,7 +1,6 @@
 package io.github.trashemailtelegramconnector;
 
 import io.github.trashemailtelegramconnector.config.TelegramConfig;
-import io.github.trashemailtelegramconnector.exceptions.MessageNotSentException;
 import io.github.trashemailtelegramconnector.telegram.TelegramMessageResponse;
 import io.github.trashemailtelegramconnector.telegram.messageEntities.InlineKeyboardButton;
 import io.github.trashemailtelegramconnector.telegram.messageEntities.InlineKeyboardMarkup;
