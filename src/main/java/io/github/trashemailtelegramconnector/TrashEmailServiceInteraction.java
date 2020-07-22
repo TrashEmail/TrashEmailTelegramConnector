@@ -4,7 +4,6 @@ import io.github.trashemailtelegramconnector.DTO.TrashEmailServiceRequest;
 import io.github.trashemailtelegramconnector.DTO.TrashEmailServiceResponse;
 import io.github.trashemailtelegramconnector.config.TrashEmailConfig;
 import io.github.trashemailtelegramconnector.exceptions.EmailAliasNotCreatedExecption;
-import io.github.trashemailtelegramconnector.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
