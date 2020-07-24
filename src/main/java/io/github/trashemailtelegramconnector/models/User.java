@@ -24,29 +24,15 @@ public class User {
 
     private String emailId;
 
-    private String forwardsTo;
-
     @CreationTimestamp
     private LocalDateTime createDateTime;
 
     private Boolean isActive;
 
-    public User(long chatId, String emailId, String forwardsTo,
-                Boolean isActive) {
-        this.chatId = chatId;
-        this.emailId = emailId;
-        this.forwardsTo = forwardsTo;
-        this.isActive = isActive;
-    }
-
-    public User(long chatId, String emailId, String forwardsTo) {
-        this(chatId, emailId, forwardsTo, Boolean.TRUE);
-    }
-
     public User(long chatId, String emailId) {
         this.chatId = chatId;
         this.emailId = emailId;
-        this.isActive = true;
+        this.isActive = Boolean.TRUE;
     }
 
     @Override
