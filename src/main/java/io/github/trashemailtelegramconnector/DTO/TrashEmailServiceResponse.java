@@ -14,5 +14,5 @@ public class TrashEmailServiceResponse {
     private String message;
     private String emailId;
     private String error;
-    private String isDeleted;
+    private Boolean isDeleted;
 }
