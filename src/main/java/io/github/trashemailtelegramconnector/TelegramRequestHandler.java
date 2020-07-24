@@ -392,16 +392,15 @@ public class TelegramRequestHandler {
                     }
                 }
 
-//            case "/follow":
-//                String follow_response = "Follow me on " +
-//                        "[Twitter](https://twitter" +
-//                        ".com/sehgal_rohit)";
-//
-//                return new TelegramResponse(
-//                        chatId,
-//                        follow_response
-//                );
-//
+            case "/follow":
+                String follow_response = "Follow me on " +
+                        "[Twitter](https://twitter.com/sehgal_rohit)";
+
+                return new TelegramMessageResponse(
+                        chatId,
+                        follow_response
+                );
+
             case "/sponsor":
                 String sponsor_response = "Average running cost of this " +
                         "per-month is $30, if you like the idea and would " +
