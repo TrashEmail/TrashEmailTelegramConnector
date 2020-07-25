@@ -4,7 +4,11 @@ import io.github.trashemailtelegramconnector.DTO.TrashEmailServiceRequest;
 import io.github.trashemailtelegramconnector.DTO.TrashEmailServiceResponse;
 import io.github.trashemailtelegramconnector.config.TelegramConnectorConfig;
 import io.github.trashemailtelegramconnector.exceptions.EmailAliasNotCreatedExecption;
+import io.github.trashemailtelegramconnector.models.FreeUserId;
+import io.github.trashemailtelegramconnector.models.UsedUserId;
 import io.github.trashemailtelegramconnector.models.User;
+import io.github.trashemailtelegramconnector.repository.FreeUserIdRepository;
+import io.github.trashemailtelegramconnector.repository.UsedUserIdRepository;
 import io.github.trashemailtelegramconnector.repository.UserRepository;
 import io.github.trashemailtelegramconnector.telegram.TelegramMessageResponse;
 import io.github.trashemailtelegramconnector.telegram.messageEntities.InlineKeyboardButton;
@@ -31,6 +35,10 @@ public class TelegramRequestHandler {
     TrashEmailServiceInteraction trashEmailServiceInteraction;
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    UsedUserIdRepository usedUserIdRepository;
+    @Autowired
+    FreeUserIdRepository freeUserIdRepository;
 
     private static final Logger log = LoggerFactory.getLogger(
             TelegramRequestHandler.class);
@@ -107,6 +115,69 @@ public class TelegramRequestHandler {
                         chatId,
                         responseText
                 );
+            case "/generate":
+                String generate_response = "";
+                if(usedUserIdRepository.findByChatIdAndIsActiveTrue(chatId).size()>=2)
+                    generate_response = "You already have two random emails " +
+                            "ids";
+                else {
+                    FreeUserId freeUserId = freeUserIdRepository.findTopByOrderByIdAsc();
+
+                    log.info(freeUserId.getUserId());
+
+                    User user = new User();
+                    user.setIsActive(true);
+                    user.setChatId(chatId);
+                    user.setEmailId(freeUserId.getUserId());
+
+                    try {
+                        generate_response = this.createEmail(user);
+                    }
+                    catch (EmailAliasNotCreatedExecption emailAliasNotCreatedExecption) {
+                        log.error("Exception " + emailAliasNotCreatedExecption.getMessage());
+                        responseText = "Email address is already taken." +
+                                "\n" +
+                                "Please try something else.";
+                        return new TelegramMessageResponse(
+                                chatId,
+                                responseText
+                        );
+
+                    }
+                    catch (HttpClientErrorException httpClientErrorException) {
+
+                        log.error("Exception " +
+                                          httpClientErrorException.getMessage());
+                        responseText = "Email address is already taken." +
+                                "\nPlease try something else.";
+                        return new TelegramMessageResponse(
+                                chatId,
+                                responseText
+                        );
+                    }
+
+                    if (generate_response != null) {
+					/*
+					Perform this if the user id is created on the server
+					*/
+                        freeUserIdRepository.delete(freeUserId);
+
+                        UsedUserId usedUserId = new UsedUserId();
+                        usedUserId.setChatId(chatId);
+                        usedUserId.setIsActive(true);
+                        usedUserId.setUserId(freeUserId.getUserId());
+                        usedUserIdRepository.save(usedUserId);
+
+                        userRepository.save(user);
+
+                        generate_response = "Email Id : " + user.getEmailId() +
+                                " created.\nThis will get disposed after 10 " +
+                                "mins";
+                    }
+                }
+                return new TelegramMessageResponse(
+                        chatId,
+                        generate_response);
 
             case "/create":
                 if(userRepository.findByChatIdAndIsActiveTrue(chatId).size()
@@ -336,8 +407,6 @@ public class TelegramRequestHandler {
 
                     inlineKeyboardMarkup.setInlineKeyboardButtonList(
                             buttonList);
-
-                    log.info(inlineKeyboardMarkup.toString());
 
                     return new TelegramMessageResponse(
                             chatId,

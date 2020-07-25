@@ -24,6 +24,8 @@ public class User {
 
     private String emailId;
 
+    private Boolean isTemp;
+
     @CreationTimestamp
     private LocalDateTime createDateTime;
 

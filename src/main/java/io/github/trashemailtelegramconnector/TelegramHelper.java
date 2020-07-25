@@ -62,7 +62,7 @@ public class TelegramHelper {
             TelegramMessageResponse request = new TelegramMessageResponse(
                     chatId,
                     messageChunks.get(i),
-                    "html");
+                    "HTML");
 
 
             ResponseEntity response = restTemplate.postForEntity(
@@ -73,7 +73,7 @@ public class TelegramHelper {
             if (response.getStatusCode() == HttpStatus.OK) {
                 log.debug("Message sent to user: " + chatId);
             } else
-                log.error("Unable to send message to user: " + chatId);
+                log.error("Unable to send the message to user: " + chatId);
         }
 
         if (emailURI != null) {

@@ -17,6 +17,11 @@ public interface UserRepository extends CrudRepository<User, Integer> {
     public boolean existsByEmailIdAndIsActiveTrue(String emailId);
     public void delete(User user);
 
+    @Query(value = "SELECT * FROM user_email_to_chat_id_mapping " +
+            "where create_date_time <= " +
+            "NOW() - INTERVAL 10 MINUTE and is_temp=0x1", nativeQuery = true)
+    public List<User> getUserIdsCreatedBeforeTenMinutes();
+
     public long count();
 
     public List<User> findByEmailIdEndsWith(String domain);
