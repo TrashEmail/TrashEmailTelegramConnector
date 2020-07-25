@@ -15,5 +15,4 @@ public class TelegramConfig {
     private String botToken;
     private String url;
     private int size;
-    private String emailHostPath;
 }

@@ -21,7 +21,7 @@ public class TrashEmailServiceInteraction {
 
     public TrashEmailServiceResponse processRequest(TrashEmailServiceRequest tsr)
     throws EmailAliasNotCreatedExecption {
-        String targetURI = trashEmailConfig.getUrl() + tsr.getRequestPath();
+        String targetURI = trashEmailConfig.getTrashEmailServiceUrl() + tsr.getRequestPath();
         ResponseEntity responseEntity = restTemplate.postForEntity(
                 targetURI,
                 tsr,

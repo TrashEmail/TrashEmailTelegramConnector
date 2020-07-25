@@ -37,7 +37,10 @@ public class TelegramRequestHandler {
 
     public String createEmail(User user)
     throws HttpClientErrorException, EmailAliasNotCreatedExecption {
+        log.info(user.toString());
         TrashEmailServiceRequest trashEmailServiceRequest = new TrashEmailServiceRequest(user);
+        trashEmailServiceRequest.setSource(telegramConnectorConfig.getSource());
+        trashEmailServiceRequest.setDestination(telegramConnectorConfig.getSource() + "/telegram/sendMessage");
         trashEmailServiceRequest.setRequestPath("/create");
 
         TrashEmailServiceResponse trashEmailServiceResponse =
@@ -52,6 +55,8 @@ public class TelegramRequestHandler {
     public String deleteEmail(User user)
     throws HttpClientErrorException, EmailAliasNotCreatedExecption {
         TrashEmailServiceRequest trashEmailServiceRequest = new TrashEmailServiceRequest(user);
+        trashEmailServiceRequest.setSource(telegramConnectorConfig.getSource());
+        trashEmailServiceRequest.setDestination(telegramConnectorConfig.getSource() + "/telegram/sendMessage");
         trashEmailServiceRequest.setRequestPath("/delete");
 
         TrashEmailServiceResponse tsr = trashEmailServiceInteraction.processRequest(trashEmailServiceRequest);
@@ -307,15 +312,12 @@ public class TelegramRequestHandler {
                 if(argument == null){
                     responseText = "Pick an email to delete.";
 
-                    List<User> emailsWithUser =
-                            userRepository.findByChatIdAndIsActiveTrue(
-                                    chatId);
+                    List<User> emailsWithUser = userRepository.findByChatIdAndIsActiveTrue(chatId);
 
                     int buttonPerRow = 1;
-                    int buttonsRow = (int) Math.ceil(
-                            (double)emailsWithUser.size()/buttonPerRow);
-                    List<List<InlineKeyboardButton>> buttonList =
-                            new ArrayList<>(buttonsRow);
+                    int buttonsRow = (int) Math.ceil((double)emailsWithUser.size()/buttonPerRow);
+
+                    List<List<InlineKeyboardButton>> buttonList = new ArrayList<>(buttonsRow);
 
                     for(int i=0;i<buttonsRow;++i)
                         buttonList.add(new ArrayList<>());
@@ -334,6 +336,9 @@ public class TelegramRequestHandler {
 
                     inlineKeyboardMarkup.setInlineKeyboardButtonList(
                             buttonList);
+
+                    log.info(inlineKeyboardMarkup.toString());
+
                     return new TelegramMessageResponse(
                             chatId,
                             responseText,

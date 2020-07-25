@@ -39,4 +39,5 @@ public class User {
     public java.lang.String toString() {
         return this.emailId;
     }
+
 }
