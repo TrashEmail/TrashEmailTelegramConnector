@@ -195,7 +195,6 @@ public class TelegramRequestHandler {
                     }
 
                     else{
-                        Random random = new Random();
                         if(argument != null) {
                                 /*
                                 User entered something like : /create username.
@@ -225,16 +224,11 @@ public class TelegramRequestHandler {
                                 User user = new User(chatId, emailId);
 
                                 String response = null;
-                                try {
-
+                                try{
                                     response = this.createEmail(user);
-
                                 }catch (EmailAliasNotCreatedExecption emailAliasNotCreatedExecption){
-                                    log.error("Exception " +
-                                                      emailAliasNotCreatedExecption.getMessage());
-                                    responseText = "Email address is already taken." +
-                                            "\n" +
-                                            "Please try something else.";
+                                    log.error("Exception " + emailAliasNotCreatedExecption.getMessage());
+                                    responseText = "Email address is already taken.\nPlease try something else.";
                                     return new TelegramMessageResponse(
                                             chatId,
                                             responseText
@@ -243,8 +237,7 @@ public class TelegramRequestHandler {
                                 }catch (HttpClientErrorException httpClientErrorException){
 
                                     log.error("Exception " + httpClientErrorException.getMessage());
-                                    responseText =  "Email address is already taken." +
-                                            "\nPlease try something else.";
+                                    responseText =  "Email address is already taken.\nPlease try something else.";
                                     return new TelegramMessageResponse(
                                             chatId,
                                             responseText
@@ -356,7 +349,6 @@ public class TelegramRequestHandler {
                             "protect you against spam and newsletters." +
                             "E-Mail forwarding made easy.\n" +
                             "I am open source and runs on open source services.\n" +
-
                             "Currently, I support:\n" +
                             "/create - That can get you one(or more) " +
                             "custom disposable emails.\n" +
@@ -399,10 +391,7 @@ public class TelegramRequestHandler {
                         for(int i=0; i < emailsWithUser.size(); ++i){
                             InlineKeyboardButton btn = new InlineKeyboardButton();
                             btn.setText(emailsWithUser.get(i).toString());
-                            btn.setCallback_data(
-                                    "/delete " +
-                                            emailsWithUser.get(i).toString());
-
+                            btn.setCallback_data("/delete " + emailsWithUser.get(i).toString());
                             buttonList.get(i / buttonPerRow).add(btn);
                         }
 
