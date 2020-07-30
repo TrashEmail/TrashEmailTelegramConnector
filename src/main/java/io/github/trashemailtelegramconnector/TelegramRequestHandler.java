@@ -395,8 +395,7 @@ public class TelegramRequestHandler {
                             buttonList.get(i / buttonPerRow).add(btn);
                         }
 
-                        inlineKeyboardMarkup.setInlineKeyboardButtonList(
-                                buttonList);
+                        inlineKeyboardMarkup.setInlineKeyboardButtonList(buttonList);
 
                         return new TelegramMessageResponse(
                                 chatId,
