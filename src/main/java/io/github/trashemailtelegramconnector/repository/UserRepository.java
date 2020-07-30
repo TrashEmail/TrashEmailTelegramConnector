@@ -27,11 +27,16 @@ public interface UserRepository extends CrudRepository<User, Integer> {
     public List<User> findByEmailIdEndsWith(String domain);
 
     @Query(value = "select max(u.id) from User u")
-    public long getNumberOfUsers();
+    public long getTotalEmailIds();
 
-    @Query(value = "SELECT count(DISTINCT user.chatId) FROM " +
-            "User user")
-    public long getDistinctChatIdCount();
+    @Query(value = "select max(u.id) from User u where u.isActive = true")
+    public long getActiveEmailIds();
+
+    @Query(value = "SELECT count(DISTINCT user.chatId) FROM User user")
+    public long getTotalChatIdCount();
+
+    @Query(value = "SELECT count(DISTINCT user.chatId) FROM User user where user.isActive = true ")
+    public long getActiveChatIdCount();
 
     @Query(
             value = "SELECT count(user.emailId) FROM User user " +
