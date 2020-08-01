@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,6 +73,18 @@ public class TelegramRequestHandler {
 
             user.setIsActive(false);
             userRepository.save(user);
+
+            /*
+            Delete this user if exists in usedUserId and move to free.
+            */
+            UsedUserId u = usedUserIdRepository.findByUserId(user.getEmailId());
+            if(u != null){
+                FreeUserId f = new FreeUserId();
+                f.setUserId(u.getUserId());
+                freeUserIdRepository.save(f);
+
+                usedUserIdRepository.delete(u);
+            }
 
             return "Email Id *deleted* and added to open pool.";
         }
