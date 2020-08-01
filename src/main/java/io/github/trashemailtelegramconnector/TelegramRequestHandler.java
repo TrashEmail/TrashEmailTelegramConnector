@@ -130,6 +130,7 @@ public class TelegramRequestHandler {
                         user.setIsActive(true);
                         user.setChatId(chatId);
                         user.setEmailId(freeUserId.getUserId());
+                        user.setIsTemp(true);
 
                         try {
                             generate_response = this.createEmail(user);
