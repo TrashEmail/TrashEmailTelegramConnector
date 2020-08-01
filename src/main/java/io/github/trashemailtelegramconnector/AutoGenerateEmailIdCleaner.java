@@ -40,7 +40,8 @@ public class AutoGenerateEmailIdCleaner {
 
         for (UsedUserId usedUserId : toDelete) {
             User user = userRepository.findByEmailIdAndIsActiveTrue(usedUserId.getUserId());
-            telegramRequestHandler.deleteEmail(user);
+            if(user != null)
+                telegramRequestHandler.deleteEmail(user);
         }
     }
 }
