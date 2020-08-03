@@ -24,8 +24,6 @@ public interface UserRepository extends CrudRepository<User, Integer> {
 
     public long count();
 
-    public List<User> findByEmailIdEndsWith(String domain);
-
     @Query(value = "select max(u.id) from User u")
     public long getTotalEmailIds();
 
@@ -37,27 +35,5 @@ public interface UserRepository extends CrudRepository<User, Integer> {
 
     @Query(value = "SELECT count(DISTINCT user.chatId) FROM User user where user.isActive = true ")
     public long getActiveChatIdCount();
-
-    @Query(
-            value = "SELECT count(user.emailId) FROM User user " +
-                    "WHERE DATE (user.createDateTime) = CURDATE() "
-    )
-    public long getEmailIdsCreatedTodayCount();
-
-    /*
-    In JPA DB dialects for date manipulations are not good, so using java
-    based approach.
-    */
-    @Query(
-            value = "SELECT count(user.emailId) FROM User user " +
-                    "WHERE DATE(user.createDateTime) >= :oneWeekOldDate and " +
-                    "DATE(user.createDateTime) <= :today " +
-                    "GROUP BY DATE(user.createDateTime) " +
-                    "ORDER BY DATE(user.createDateTime)"
-    )
-    public List<Long> getEmailIdsCreatedInWeek(
-            @Param("today") Date currDate,
-            @Param("oneWeekOldDate") Date oneWeekOldDate
-    );
 
 }
