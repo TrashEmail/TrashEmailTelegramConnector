@@ -471,7 +471,7 @@ public class TelegramRequestHandler {
 
                 case "/follow":
                     String follow_response = "Follow me on " +
-                            "[Twitter](https://twitter.com/sehgal_rohit)";
+                            "[Twitter](https://twitter.com/sec_r0)";
 
                     return new TelegramMessageResponse(
                             chatId,
